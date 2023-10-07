@@ -17,7 +17,7 @@ const getAllCourses = async (req, res) => {
 }
 
 const getCourse = asyncWrapper(async (req, res, next) => {
-    let course;
+    let course
     course = await Course.findById(req.params.courseid)
 
     if (!course) {
