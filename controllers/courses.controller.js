@@ -2,7 +2,6 @@ const { validationResult } = require('express-validator')
 const Course = require('../models/course.model')
 const httpStatusTexts = require('../utils/httpStatusText');
 const asyncWrapper = require('../middlewares/asyncWrapper');
-const AppError = require('../utils/appError');
 const appError = require('../utils/appError');
 
 
@@ -16,15 +15,21 @@ const getAllCourses = async (req, res) => {
     res.json({ status: httpStatusTexts.SUCCESS, data: { courses } })
     res.end();
 }
+
 const getCourse = asyncWrapper(async (req, res, next) => {
     let course;
     course = await Course.findById(req.params.courseid)
+
     if (!course) {
+
         const error = appError.create("Not Found", 404, httpStatusTexts.FAIL)
+
         return next(error)
     }
+
     res.json({ status: httpStatusTexts.SUCCESS, data: { course } })
     res.end();
+
 })
 
 const addCourse = asyncWrapper(async (req, res, next) => {
@@ -49,6 +54,7 @@ const updateCourse =  asyncWrapper( async (req, res) => {
     console.log(UpdatedCourse)
     res.status(200).json({ status: httpStatusTexts.SUCCESS, data: { UpdatedCourse } })
 })
+
 
 const deleteCourse = asyncWrapper( async (req, res) => {
     const courseID = req.params.courseid

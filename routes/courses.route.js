@@ -9,6 +9,7 @@ router.route('/:courseid')
     .patch(coursesController.updateCourse)
     .delete(coursesController.deleteCourse)
 
+
 router.route('/')
     .get(coursesController.getAllCourses)
     .post(validationSchema.postValidationSchema(), coursesController.addCourse)
