@@ -34,7 +34,6 @@ const register = asyncWrapper(async (req, res, next) => {
     })
 
     const token = await generateJWT({ email: newUser.email, id: newUser.id, role: newUser.role })
-    // console.log("TOKEN, ", token);
 
     newUser.token = token;
     await newUser.save();
