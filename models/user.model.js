@@ -32,8 +32,6 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        //we save the name of the picture in the database
-        //we don't save the picture itself in the database
         default: 'uploads/profile.png'
     }
 });

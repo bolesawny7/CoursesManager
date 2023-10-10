@@ -23,11 +23,6 @@ const register = asyncWrapper(async (req, res, next) => {
         const error = appError.create("User already exists", 404, httpStatusTexts.FAIL)
         return next(error)
     }
-    //req.file is the file multer sent as it is the middleware before this function
-    //so multer sent this object through the request that we can access the image details and anything we want from it
-    //uncomment and see
-    // console.log(req.file)
-
     const hashedPassword = await bcrypt.hash(password, 10)
     const newUser = new User({
         firstName, 

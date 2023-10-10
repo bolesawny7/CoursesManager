@@ -6,7 +6,6 @@ const multer = require('multer');
 const appError = require('../utils/appError');
 const diskStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // console.log("File: ", file);
         cb(null, 'uploads')
     },
     filename: function (req, file, cb) {
@@ -24,7 +23,6 @@ const fileFilter = (req, file, cb) => {
         return cb(appError.create("this file type is not supported, the file must be an image", 400), false)
     }
 }
-//filefilter is a function to check the file uploaded is under supervision with a rule we put
 const upload = multer({ storage: diskStorage, fileFilter})
 
 router.route('/')
