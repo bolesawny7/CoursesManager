@@ -2,28 +2,7 @@ const express = require('express')
 const usersController = require('../controllers/users.controller')
 const verifyToken = require('../middlewares/verifyToken')
 const router = express.Router();
-const multer = require('multer');
-const appError = require('../utils/appError');
-const diskStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads')
-    },
-    filename: function (req, file, cb) {
-        const extention = file.mimetype.split('/')[1];
-        const filename = `user_${Date.now()}.${extention}`
-        cb(null, filename)
-    }
-})
-const fileFilter = (req, file, cb) => {
-    const fileType = file.mimetype.split('/')[0];
-    if (fileType == "image") {
-        cb(null, true)
-    }
-    else {
-        return cb(appError.create("this file type is not supported, the file must be an image", 400), false)
-    }
-}
-const upload = multer({ storage: diskStorage, fileFilter})
+const upload = require('../utils/imageUpload')
 
 router.route('/')
     .get(verifyToken, usersController.getAllUsers)
