@@ -1,9 +1,9 @@
 const express = require('express')
 const cors = require("cors")
-const port = process.env.PORT;
 const app = express();
 const mongoose = require('mongoose')
 require("dotenv").config()
+const path = require('path')
 
 const url = process.env.MONGO_URL
 mongoose.connect(url)
@@ -19,6 +19,8 @@ app.use(express.json())
 app.use('/api/courses', coursesRouter)
 app.use('/api/users', usersRouter)
 
+//express.static says that this folder is a folder holding static files
+app.use('/uploads',express.static(path.join(__dirname,'uploads')))
 
 //global middleware for not found routes
 app.all('*', (req, res, next) => {

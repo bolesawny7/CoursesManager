@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs')
 const generateJWT = require('../utils/generateJWT')
 
 const getAllUsers = asyncWrapper(async (req, res, next) => {
-    
+
     const query = req.query;
     const limit = query.limit || 5;
     const page = query.page || 1;
@@ -17,20 +17,29 @@ const getAllUsers = asyncWrapper(async (req, res, next) => {
 })
 
 const register = asyncWrapper(async (req, res, next) => {
-    const { firstName, lastName, email, password } = req.body
+    const { firstName, lastName, email, password, role } = req.body
     const oldUser = await User.findOne({ email: email })
     if (oldUser) {
         const error = appError.create("User already exists", 404, httpStatusTexts.FAIL)
-
         return next(error)
     }
+    //req.file is the file multer sent as it is the middleware before this function
+    //so multer sent this object through the request that we can access the image details and anything we want from it
+    //uncomment and see
+    // console.log(req.file)
+
     const hashedPassword = await bcrypt.hash(password, 10)
     const newUser = new User({
-        firstName, lastName, email, password: hashedPassword
+        firstName, 
+        lastName, 
+        email, 
+        password: hashedPassword, 
+        role, 
+        avatar: req.file.filename
     })
 
-    const token = await generateJWT({ email: newUser.email, id: newUser.id })
-    console.log("TOKEN, ", token);
+    const token = await generateJWT({ email: newUser.email, id: newUser.id, role: newUser.role })
+    // console.log("TOKEN, ", token);
 
     newUser.token = token;
     await newUser.save();
@@ -56,7 +65,7 @@ const login = asyncWrapper(async (req, res, next) => {
     const matchedPassword = await bcrypt.compare(password, user.password)
 
     if (user && matchedPassword) {
-        const token = await generateJWT({ email: user.email, id: user.id })
+        const token = await generateJWT({ email: user.email, id: user.id, role: user.role })
         res.status(200).json({ status: httpStatusTexts.SUCCESS, data: { msg: "logged in successfully", token: token, user } })
         res.end()
     }
