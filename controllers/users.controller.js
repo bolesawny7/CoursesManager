@@ -6,7 +6,10 @@ const bcrypt = require('bcryptjs')
 const generateJWT = require('../utils/generateJWT')
 
 const getAllUsers = asyncWrapper(async (req, res, next) => {
-
+    const queryParams = req.query.ids;
+    if (queryParams.ids) {
+        next();
+    }
     const query = req.query;
     const limit = query.limit || 5;
     const page = query.page || 1;
@@ -69,8 +72,21 @@ const login = asyncWrapper(async (req, res, next) => {
     }
 })
 
+const searchForUsersById = async (req,res,next) => {
+    const userIds = req.query.ids; 
+    //users?ids=id1_id2_id3
+    const idsArray = userIds.split(',');
 
 
+    // const query = `SELECT * from users where id In (?)`
+
+    // const users = await User.find({_id: {$in: idsArray}});
+    console.log(idsArray)
+    res.json(idsArray)
+}
+
+// "1_2_3_4_5,6,7,8,9,10"
+// abcde_abcde
 module.exports = {
-    getAllUsers, register, login
+    getAllUsers, register, login,searchForUsersById
 }

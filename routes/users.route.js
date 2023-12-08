@@ -5,7 +5,7 @@ const router = express.Router();
 const upload = require('../utils/imageUpload')
 
 router.route('/')
-    .get(verifyToken, usersController.getAllUsers)
+    .get(verifyToken, usersController.searchForUsersById, usersController.searchForUsersById)
 
 router.route('/login')
     .post(usersController.login)

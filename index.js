@@ -16,9 +16,7 @@ const usersRouter = require('./routes/users.route')
 
 app.use(cors())
 app.use(express.json())
-
 //serialization
-
 
 app.use('/api/courses', coursesRouter)
 app.use('/api/users', usersRouter)

@@ -5,6 +5,7 @@ const asyncWrapper = require('../middlewares/asyncWrapper');
 const appError = require('../utils/appError');
 
 
+
 const getAllCourses = async (req, res) => {
     const query = req.query;
     const limit = query.limit || 5;
@@ -12,22 +13,16 @@ const getAllCourses = async (req, res) => {
     const skip = (page - 1) * limit;
     const courses = await Course.find({}, { "__v": false }).limit(limit).skip(skip);
     res.json({ status: httpStatusTexts.SUCCESS, data: { courses } })
-    res.end();
 }
 
 const getCourse = asyncWrapper(async (req, res, next) => {
-    let course
-    course = await Course.findById(req.params.courseid)
+    let course = await Course.findById(req.params.courseid)
 
     if (!course) {
-
         const error = appError.create("Not Found", 404, httpStatusTexts.FAIL)
-
         return next(error)
     }
-
     res.json({ status: httpStatusTexts.SUCCESS, data: { course } })
-    res.end();
 
 })
 
@@ -43,11 +38,10 @@ const addCourse = asyncWrapper(async (req, res, next) => {
     await newCourse.save();
 
     res.json({ status: httpStatusTexts.SUCCESS, data: { newCourse } })
-    res.end()
 })
 
 
-const updateCourse =  asyncWrapper( async (req, res) => {
+const updateCourse = asyncWrapper(async (req, res) => {
     const courseId = req.params.courseId
     const UpdatedCourse = await Course.updateOne({ _id: courseId, }, { $set: { ...req.body } })
     console.log(UpdatedCourse)
@@ -55,7 +49,7 @@ const updateCourse =  asyncWrapper( async (req, res) => {
 })
 
 
-const deleteCourse = asyncWrapper( async (req, res) => {
+const deleteCourse = asyncWrapper(async (req, res) => {
     const courseID = req.params.courseid
     await Course.deleteOne({ _id: courseID })
     const courses = await Course.find()
