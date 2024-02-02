@@ -10,7 +10,7 @@ mongoose.connect(url)
     .then(console.log("mongoDb server started"))
     .catch("error occured")
 
-
+``
 const coursesRouter = require('./routes/courses.route')
 const usersRouter = require('./routes/users.route')
 
